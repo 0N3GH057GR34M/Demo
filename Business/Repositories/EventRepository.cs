@@ -11,24 +11,24 @@ namespace Business.Repositories
     private readonly ApplicationContext _context;
     public EventRepository(ApplicationContext context)
     {
-      if (context is null) throw new ArgumentNullException(nameof(context));
+      if (context is null) throw new ArgumentNullException(nameof(ApplicationContext));
 
       _context = context;
     }
     public  async Task CreateAsync(EventEntity entity)
     {
-      if (entity is null) throw new ArgumentNullException(nameof(entity));
+      if (entity is null) throw new ArgumentNullException(nameof(EventEntity));
 
       await _context.AddAsync(entity);
-      await _context.SaveChangesAsync();
+      _context.SaveChanges();
     }
 
     public async Task DeleteAsync(EventEntity entity)
     {
-      if(entity is null) throw new ArgumentNullException(nameof(entity));
+      if(entity is null) throw new ArgumentNullException(nameof(EventEntity));
 
       _context.Remove(entity);
-      await _context.SaveChangesAsync();
+      _context.SaveChanges();
     }
 
     public async Task<IEnumerable<EventEntity>> GetAsync(Expression<Func<EventEntity, bool>>? predicate = null)
@@ -38,12 +38,12 @@ namespace Business.Repositories
         await _context.Events.ToListAsync();
     }
 
-    public async Task UpdateAsync(EventEntity entity)
+    public void Update(EventEntity entity)
     {
-      if(entity is null) throw new ArgumentNullException(nameof(entity));
+      if(entity is null) throw new ArgumentNullException(nameof(EventEntity));
 
       _context.Update(entity);
-      await _context.SaveChangesAsync();
+      _context.SaveChanges();
     }
   }
 }
