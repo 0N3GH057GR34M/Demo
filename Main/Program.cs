@@ -2,10 +2,12 @@ using Business.Commands;
 using Business.Implementations;
 using Business.Repositories;
 using Business.Services;
+using Business.Validators;
 using Data;
 using Data.Interfaces;
 using Domain.Entities;
 using Domain.Models;
+using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,6 +16,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IValidator<CreateEventCommand>, CreateEventCommandValidator>();
 
 builder.Services.AddHttpClient();
 

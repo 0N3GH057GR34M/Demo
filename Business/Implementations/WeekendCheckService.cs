@@ -1,7 +1,6 @@
 ﻿using Business.Services;
 using Domain;
 using Domain.Models;
-using Microsoft.Extensions.Configuration;
 using System.Net.Http.Json;
 using System.Text.Json;
 
