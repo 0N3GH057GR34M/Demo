@@ -14,8 +14,8 @@ namespace Main.Controllers
 
     public EventController(ILogger<EventController> logger, IMediator mediator)
     {
-      if(mediator is null) throw new ArgumentNullException(nameof(mediator));
-      if(logger is null) throw new ArgumentNullException(nameof(logger));
+      ArgumentNullException.ThrowIfNull(mediator);
+      ArgumentNullException.ThrowIfNull(logger);
 
       _logger = logger;
       _mediator = mediator;
@@ -25,9 +25,11 @@ namespace Main.Controllers
     [Route("create")]
     public async Task<IActionResult> CreateEvent([FromBody] CreateEventCommand command)
     {
-      if (command is null) throw new ArgumentNullException(nameof(CreateEventCommand));
+      ArgumentNullException.ThrowIfNull(command);
 
       await _mediator.Send(command);
+
+      _logger.LogInformation("Event added succesfuly.");
 
       return Ok();
     }

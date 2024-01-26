@@ -1,8 +1,11 @@
 using Business.Commands;
+using Business.Implementations;
 using Business.Repositories;
+using Business.Services;
 using Data;
 using Data.Interfaces;
 using Domain.Entities;
+using Domain.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,9 +15,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddHttpClient();
+
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateEventCommandHandler).Assembly));
 
 builder.Services.AddTransient<IRepository<EventEntity, Guid>, EventRepository>();
+
+builder.Services.AddTransient<IDayCheckService<HolidayModel>, WeekendCheckService>();
 
 builder.Services.AddDbContextPool<ApplicationContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("MsSqlServer")));
 

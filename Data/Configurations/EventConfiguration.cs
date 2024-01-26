@@ -12,8 +12,7 @@ namespace Data.Configurations
       builder.HasKey(x => x.Id);
       builder.Property(x => x.Type).IsRequired().HasColumnName("type");
       builder.Property(x => x.Description).HasColumnName("description").HasMaxLength(50);
-      builder.Property(x => x.StartDate).IsRequired().HasColumnName("start_date");
-      builder.Property(x => x.EndDate).IsRequired().HasColumnName("end_date");
+      builder.Property(x => x.Date).IsRequired().HasColumnName("date");
     }
   }
 }

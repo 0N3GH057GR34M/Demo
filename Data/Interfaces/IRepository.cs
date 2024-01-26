@@ -6,7 +6,7 @@ namespace Data.Interfaces
   {
     Task CreateAsync(T entity);
     void Update(T entity); 
-    Task DeleteAsync(T entity);
+    void Delete(T entity);
     Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>>? predicate = null);
   }
 }

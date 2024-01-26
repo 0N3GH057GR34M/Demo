@@ -1,6 +1,8 @@
-﻿using Data.Interfaces;
+﻿using Business.Services;
+using Data.Interfaces;
 using Domain.Entities;
 using Domain.Enums;
+using Domain.Models;
 using MediatR;
 
 namespace Business.Commands
@@ -9,31 +11,35 @@ namespace Business.Commands
   {
     public EventType Type { get; init; }
     public string? Description { get; init; }
-    public DateTime StartDate { get; init; }
-    public DateTime EndDate { get; init; }
+    public DateTime Date { get; init; }
   }
   public class CreateEventCommandHandler : IRequestHandler<CreateEventCommand>
   {
     private readonly IRepository<EventEntity, Guid> _eventRepository;
+    private readonly IDayCheckService<HolidayModel> _weekendCheckService;
 
-    public CreateEventCommandHandler(IRepository<EventEntity, Guid> eventRepository)
+    public CreateEventCommandHandler(IRepository<EventEntity, Guid> eventRepository, IDayCheckService<HolidayModel> weekendCheckService)
     {
-      if(eventRepository is null) throw new ArgumentNullException(nameof(IRepository<EventEntity, Guid>));
+      ArgumentNullException.ThrowIfNull(eventRepository);
+      ArgumentNullException.ThrowIfNull(weekendCheckService);
 
       _eventRepository = eventRepository;
+      _weekendCheckService = weekendCheckService;
     }
     
     public async Task Handle(CreateEventCommand request, CancellationToken cancellationToken)
     {
-      if(request is null) throw new ArgumentNullException(nameof(CreateEventCommand));
+      ArgumentNullException.ThrowIfNull(request);
 
-      await _eventRepository.CreateAsync(new EventEntity
+      if(!(await _weekendCheckService.CheckAsync(request.Date)))
       {
-        Description = request.Description,
-        Type = request.Type,
-        StartDate = request.StartDate,
-        EndDate = request.EndDate,
-      });
+        await _eventRepository.CreateAsync(new EventEntity
+        {
+          Description = request.Description,
+          Type = request.Type,
+          Date = request.Date
+        });
+      }
     }
   }
 }
