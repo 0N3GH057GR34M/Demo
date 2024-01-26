@@ -33,7 +33,7 @@ namespace Business.Implementations
       }
 
       return 
-        holidays.Any(item => item.Date.Equals(date)) ||
+        holidays.Any(item => item.Date.DayOfYear.Equals(date.DayOfYear)) ||
         date.DayOfWeek == DayOfWeek.Saturday ||
         date.DayOfWeek == DayOfWeek.Sunday;
     }
